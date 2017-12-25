@@ -1,0 +1,27 @@
+.fa:hover {
+    cursor: pointer;
+}
+
+.lowQty {
+    color: red;
+    font-weight: bold;
+}
+
+
+.mat-column-actions {
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+mat-cell.mat-cell {
+    text-align: center;
+}
+
+mat-header-cell.mat-header-cell {
+    text-align: center;
+}
+
+/*mat-row.mat-row:hover  {*/
+    /*background-color: #f2f2f2;*/
+/*}*/

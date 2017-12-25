@@ -1,0 +1,25 @@
+.fa:hover {
+  cursor: pointer;
+}
+
+td {
+  vertical-align: middle;
+}
+
+
+.example-container {
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*max-height: 500px;*/
+  /*min-width: 300px;*/
+  padding: 10px;
+}
+
+th {
+  color: #808080;
+}
+
+.mat-sort-header-sorted {
+  color: black;
+  font-weight: bold;
+}

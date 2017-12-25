@@ -1,0 +1,23 @@
+.example-radio-group {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+/*.mat-form-field {*/
+  /*width: 500px;*/
+/*}*/
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin-left: 32px;
+}

@@ -1,0 +1,67 @@
+<div class="page-auth">
+    <div class="main-body">
+        <div class="card card-white">
+            <div class="card-content">
+                <div class="logo">
+                    <a [routerLink]="['/']">Login</a>
+                </div>
+
+                <form name="material_login_form" class="form-validation" [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <fieldset>
+                        <div class="form-group">
+                            <mat-form-field class="full-width">
+                                <input
+                                        required
+                                        matInput
+                                        type="email"
+                                        placeholder="Email"
+                                        formControlName="emailFormControl">
+                                <mat-icon matSuffix class="material-icons">mail_outline</mat-icon>
+                                <span *ngIf="form.get('emailFormControl').touched && form.get('emailFormControl').invalid">
+                                <mat-error
+                                        *ngIf="form.get('emailFormControl').hasError('email') && !form.get('emailFormControl').hasError('required')">
+                                    Please enter a valid email address
+                                    </mat-error>
+                                <mat-error *ngIf="form.get('emailFormControl').hasError('required')">
+                                    Email is <strong>required</strong>
+                                </mat-error>
+                                </span>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field class="full-width">
+                                <input
+                                        required
+                                        matInput
+                                        type="password"
+                                        placeholder="Password"
+                                        formControlName="passwordFormControl">
+                                <mat-icon matSuffix class="material-icons">lock_outline</mat-icon>
+                                <span *ngIf="form.get('passwordFormControl').touched && form.get('passwordFormControl').invalid">
+                                    <mat-error *ngIf="form.get('passwordFormControl').hasError('required')">
+                                        Password is <strong>required</strong>
+                                    </mat-error>
+                                    </span>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="divider divider-md"></div>
+                        <button
+                                mat-raised-button
+                                type="submit"
+                                color="primary"
+                                class="float-right"
+                                [disabled]="form.invalid">
+                            Login
+                        </button>
+                    </fieldset>
+                </form>
+
+                <div class="additional-info" *ngIf="message">
+                    <span style="color: red;">{{message}}</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

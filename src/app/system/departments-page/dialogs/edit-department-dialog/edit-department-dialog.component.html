@@ -1,0 +1,27 @@
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'edit'">Edit department card:</h2>
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'add'">Please fill department card:</h2>
+
+<div mat-dialog-content>
+
+  <form #f="ngForm">
+
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Department Name" [(ngModel)]="data.department.name" #deptName name="deptName"
+             #deptName="ngModel" required>
+      <mat-error *ngIf="!deptName.valid">
+        Department name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions style="justify-content: center; ">
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" tabindex="-1" *ngIf="data.editMode === 'edit'"
+          [disabled]="f.invalid">Save
+  </button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" tabindex="-1" *ngIf="data.editMode === 'add'"
+          [disabled]="f.invalid">Add
+  </button>
+  <button mat-raised-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>
+

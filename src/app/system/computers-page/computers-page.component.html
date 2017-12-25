@@ -1,0 +1,101 @@
+<section class="container-fluid with-maxwidth chapter" *ngIf="!isLoaded">
+
+    <article class="article">
+        <h2 class="article-title">Computers Inventory List</h2>
+        <div class="box box-default table-box mdl-shadow--2dp">
+
+            <div class="text-center" >
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </article>
+</section>
+
+<section class="container-fluid" *ngIf="isLoaded">
+
+    <article class="article">
+        <h2 class="article-title">Computers Inventory List</h2>
+        <div class="box box-default table-box mdl-shadow--2dp example-container">
+
+            <!--<div class="example-container mat-elevation-z8" >-->
+
+                <div class="d-flex justify-content-start">
+
+                    <div class="p-2">
+                        <button mat-raised-button (click)="openEditDialog()"
+                                style="margin-top: 10px;">
+                            +Add computer
+                        </button>
+                    </div>
+
+                    <div class="ml-auto p-2">
+                        <mat-form-field>
+                            <input matInput placeholder="Filter" class="d-flex flex-row-reverse" id="inlineFormInput"
+                                   [(ngModel)]="searchValue">
+                            <button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="searchValue=''">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+
+                <table class="table table-stripped table-hover table-sm mat-elevation-z8"
+                       matSort (matSortChange)="sortData($event)"
+                       matSortActive="employeeName"
+                       matSortDirection="asc"
+                       matSortDisableClear>
+                    <thead>
+                    <tr>
+                        <th mat-sort-header="employeeName">Employee</th>
+                        <th mat-sort-header="department">Department</th>
+                        <th mat-sort-header="location">Location</th>
+                        <th mat-sort-header="type">Type</th>
+                        <th>Configuration</th>
+                        <th>Software</th>
+                        <th width="15%">Description</th>
+                        <th mat-sort-header="warranty">Warranty</th>
+                        <th mat-sort-header="inv_num">Inv Num</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let c of sortedData | computersFilter:searchValue">
+                        <td>{{c.employeeName}}</td>
+                        <td>{{c.department}}</td>
+                        <td>{{c.location}}</td>
+                        <td *ngIf="c.type === 'desktop'" style="text-align: center"><i class="material-icons"
+                                                                                       matTooltip="Desktop"
+                                                                                       matTooltipPosition="above">desktop_windows</i>
+                        </td>
+                        <td *ngIf="c.type === 'laptop'" style="text-align: center"><i class="material-icons"
+                                                                                      matTooltip="Laptop"
+                                                                                      matTooltipPosition="above">laptop_windows</i>
+                        </td>
+                        <td>{{c.config}}</td>
+                        <td>{{c.software}}</td>
+                        <td>{{c.description}}</td>
+                        <td>
+                            <span class="badge" [ngClass]="{'badge-success' : warrantyActive(c.warrantyUntil)}">{{c.warrantyUntil | date:'dd.MMM.yyyy'}}</span>
+                        </td>
+                        <td style="text-align: center">{{c.inv_num}}</td>
+                        <td data-toggle="tooltip" data-placement="left" title="Edit">
+                            <i class="fa fa-pencil btn btn-success" aria-hidden="true" (click)="openEditDialog(c)"></i>
+                        </td>
+
+                        <td data-toggle="tooltip" data-placement="left" title="Delete">
+                            <i class="fa fa-trash btn btn-danger" aria-hidden="true" (click)="openDeleteDialog(c)"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            <!--</div>-->
+
+        </div>
+    </article>
+</section>

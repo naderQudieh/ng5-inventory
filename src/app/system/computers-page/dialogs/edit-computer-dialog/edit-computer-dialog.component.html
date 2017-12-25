@@ -1,0 +1,104 @@
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'edit'">Edit computer card:</h2>
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'add'">Please fill computer card:</h2>
+
+<div mat-dialog-content>
+
+    <form #f="ngForm">
+        <mat-radio-group class="example-radio-group" [(ngModel)]="data.computer.type"
+                         style="display: flex; justify-content: center; align-items: center;" required name="type"
+                         #type="ngModel">
+            <mat-radio-button class="example-radio-button" [value]="'desktop'">
+                Desktop
+            </mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="'laptop'">
+                Laptop
+            </mat-radio-button>
+        </mat-radio-group>
+        <mat-hint style="display: flex; justify-content: center; align-items: center;">Select computer type *</mat-hint>
+
+        <!--<div class="example-selected-value">Your are adding {{data.computer.type}}: </div>-->
+
+        <mat-form-field style="width: 100%;">
+            <input matInput placeholder="Employee Name" [(ngModel)]="data.computer.employeeName" #empName name="empName"
+                   #empName="ngModel" required>
+            <mat-error *ngIf="!empName.valid">
+                Employee name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field style="width: 47%;">
+            <mat-select placeholder="Select department" [(ngModel)]="data.computer.department" required name="dept"
+                        #dept="ngModel">
+                <!--<mat-option>None</mat-option>-->
+                <mat-option [value]="d.name" *ngFor="let d of data.departments">{{d.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="!dept.valid">
+                Department <strong>must</strong> be selected
+            </mat-error>
+        </mat-form-field>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <mat-form-field style="width: 47%;">
+            <input matInput placeholder="Location" [(ngModel)]="data.computer.location" name="loc">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field style="width: 100%;">
+            <input matInput placeholder="Configuration" [(ngModel)]="data.computer.config" required name="config"
+                   #config="ngModel">
+            <mat-error *ngIf="!config.valid">
+                Configuration is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 100%;">
+            <input matInput placeholder="Software" [(ngModel)]="data.computer.software" name="soft">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field style="width: 100%;">
+    <textarea matInput placeholder="Description" [(ngModel)]="data.computer.description" name="descr">
+    </textarea>
+        </mat-form-field>
+
+        <mat-form-field style="width: 49%;">
+            <input matInput placeholder="Inv Num" [(ngModel)]="data.computer.inv_num" name="invnum">
+        </mat-form-field>
+
+        <mat-form-field style="width: 49%;">
+            <input
+                    matInput
+                    [matDatepicker]="picker"
+                    placeholder="Warranty date"
+                    [formControl]="getDate(data.computer.warrantyUntil)"
+                    [(ngModel)]="data.computer.warrantyUntil"
+                    name="warranty">
+
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <!--<div class="form-group" style="width: 200px;">-->
+        <!--<label class="control-label" for="computer-warranty">Warranty date</label>-->
+        <!--<input-->
+        <!--type="date"-->
+        <!--id="computer-warranty"-->
+        <!--class="form-control col-xs-2"-->
+        <!--#warranty="ngModel"-->
+        <!--name="warranty"-->
+        <!--[(ngModel)]="data.computer.warrantyUntil">-->
+        <!--</div>-->
+
+    </form>
+</div>
+
+<div mat-dialog-actions style="display: flex; justify-content: center; align-items: center;">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" tabindex="-1" *ngIf="data.editMode === 'edit'"
+            [disabled]="f.invalid">Save
+    </button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" tabindex="-1" *ngIf="data.editMode === 'add'"
+            [disabled]="f.invalid">Add
+    </button>
+    <button mat-raised-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>
+

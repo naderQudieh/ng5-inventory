@@ -1,0 +1,176 @@
+<section class="container-fluid with-maxwidth chapter" *ngIf="!isLoaded">
+
+    <article class="article">
+        <h2 class="article-title">Printer Supplies</h2>
+        <div class="box box-default table-box mdl-shadow--2dp">
+
+            <div class="text-center">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </article>
+</section>
+
+<!--*ngIf="isLoaded"-->
+<section class="container-fluid">
+
+    <article class="article">
+        <h2 class="article-title">Printer Supplies</h2>
+        <div class="box box-default table-box mdl-shadow--2dp example-container">
+
+
+            <div class="d-flex justify-content-start">
+
+                <div class="p-2">
+                    <button mat-raised-button (click)="openEditDialog()"
+                            style="margin-top: 10px;">
+                        +Add printer
+                    </button>
+                </div>
+
+                <div class="ml-auto p-2">
+                    <mat-form-field>
+                        <input matInput placeholder="Filter" class="d-flex flex-row-reverse" id="inlineFormInput"
+                               [(ngModel)]="searchValue" (keyup)="applyFilter($event.target.value)">
+                        <button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear"
+                                (click)="searchValue=''; applyFilter('')">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <!--TABLE ====================================================================  -->
+            <!--<table class="table table-sm">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th scope="col">Printer</th>-->
+            <!--<th scope="col">Model Number</th>-->
+            <!--<th scope="col">Supplies</th>-->
+            <!--<th scope="col">Locations</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr *ngFor="let printer of printers">-->
+            <!--<th scope="row">{{printer.name}}</th>-->
+            <!--<td>{{printer.printerId}}</td>-->
+            <!--<td>-->
+            <!--<table>-->
+            <!--&lt;!&ndash;<thead>&ndash;&gt;-->
+            <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;<th scope="col">Supply Code</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;<th scope="col">Supply Name Number</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;<th scope="col">Qty in Stock</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;</thead>&ndash;&gt;-->
+            <!--<tbody>-->
+            <!--<tr *ngFor="let supply of printer.supplies">-->
+            <!--<td>{{supply.supplyId}}</td>-->
+            <!--<td>{{supply.name}}</td>-->
+            <!--<td>{{supply.quantity}}</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--</table>-->
+            <!--</td>-->
+            <!--<td>{{printer.locations}}</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--</table>-->
+            <!--TABLE ====================================================================  -->
+            <div class="example-container mat-elevation-z8">
+
+                <mat-table #table [dataSource]="dataSource" matSort matSortDisableClear>
+
+                    <ng-container matColumnDef="printer">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex: 0 0 20%;"> Printer </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="flex: 0 0 20%; text-align: left;"> {{element.name}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="printerId">
+                        <mat-header-cell *matHeaderCellDef style="flex: 0 0 15%;"> Model Number </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="flex: 0 0 15%;"> {{element.printerId}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="supplies">
+                        <mat-header-cell *matHeaderCellDef style="flex: 0 0 35%;"> Supplies Stock </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="flex: 0 0 35%;">
+                            <!--<table class="table table-striped table-sm">-->
+                            <!--<tbody>-->
+                            <!--<tr *ngFor="let supply of element.supplies">-->
+                            <!--<td>{{supply.supplyId}}</td>-->
+                            <!--<td>{{supply.name}}</td>-->
+                            <!--<td>{{supply.quantity}}</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--</table>-->
+
+                            <mat-table #table [dataSource]="getPrinterSupplies(element)" *ngIf="element">
+
+                                <ng-container matColumnDef="productCode">
+                                    <mat-header-cell *matHeaderCellDef> Product Code </mat-header-cell>
+                                    <mat-cell *matCellDef="let item"> {{item.supplyId}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="supplyName">
+                                    <mat-header-cell *matHeaderCellDef> Supply Name </mat-header-cell>
+                                    <mat-cell *matCellDef="let item"> {{item.name}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="qty">
+                                    <mat-header-cell *matHeaderCellDef> Qty in Stock </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" [ngClass]="{'lowQty': item.quantity < 1}"
+                                              (click)="editQty(element)">
+                                        <span *ngIf="currentKey != element.$key">{{item.quantity}}</span>
+                                        <span *ngIf="currentKey == element.$key">
+                                            <mat-form-field>
+                                              <input matInput [(ngModel)]="item.quantity" (keyup.enter)="save()" (blur)="save()">
+                                            </mat-form-field>
+                                        </span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="suppliesColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: suppliesColumns;"></mat-row>
+                            </mat-table>
+
+
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="locations">
+                        <mat-header-cell *matHeaderCellDef> Locations </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.locations}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style="align-items: flex-end;">
+                            <i class="fa fa-pencil btn btn-success"
+                               aria-hidden="true"
+                               (click)="openEditDialog(element)"
+                               matTooltip="Edit"
+                               matTooltipPosition="below">
+
+                            </i>
+                            &nbsp;
+                            <i class="fa fa-trash btn btn-danger"
+                               aria-hidden="true"
+                               (click)="openDeleteDialog(element)"
+                               matTooltip="Delete"
+                               matTooltipPosition="below">
+
+                            </i>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+            </div>
+
+
+        </div>
+    </article>
+</section>

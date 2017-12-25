@@ -1,0 +1,80 @@
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'edit'">Edit printer card:</h2>
+<h2 mat-dialog-title class="article-title" *ngIf="data.editMode === 'add'">Please fill printer card:</h2>
+
+<div mat-dialog-content>
+
+    <form #f="ngForm">
+        <mat-form-field style="width: 69%;">
+            <input type="text" matInput placeholder="Printer Name" [(ngModel)]="data.printer.name" #empName
+                   name="printerName"
+                   #printerName="ngModel" required>
+            <mat-error *ngIf="!printerName.valid">
+                Printer name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field style="width: 30%;">
+            <input type="text" matInput placeholder="Product Number" [(ngModel)]="data.printer.printerId"
+                   name="printId">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field style="width: 100%;">
+            <input type="text" matInput placeholder="Locations" [(ngModel)]="data.printer.locations" required name="loc"
+                   #loc="ngModel">
+            <mat-error *ngIf="!loc.valid">
+                At least one location is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+    </form>
+
+    <h3>Supplies in Stock {{item}}</h3>
+
+    <div *ngFor="let item of data.printer.supplies; let idx = index">
+
+        <mat-form-field style="width: 29%;">
+            <input type="text" matInput placeholder="Product Code" [(ngModel)]="item.supplyId" name="supplies">
+        </mat-form-field>
+
+        <mat-form-field style="width: 39%;">
+            <input type="text" matInput placeholder="Supply Name" [(ngModel)]="item.name" name="supplyName" #supplyName
+                   required>
+        </mat-form-field>
+
+        <mat-form-field style="width: 19%;">
+            <input type="number" matInput placeholder="Qty in Stock" [(ngModel)]="item.quantity" name="supplies" #qty
+                   required>
+        </mat-form-field>
+
+        <button type="button" (click)="addSupply()"
+                *ngIf="item.name != '' && item.quantity !== null && idx == data.printer.supplies.length-1">+
+        </button>
+        <button type="button" (click)="deleteSupply(idx)" *ngIf="idx > 0">X</button>
+
+
+    </div>
+
+</div>
+
+<div mat-dialog-actions style="display: flex; justify-content: center; align-items: center;">
+    <button
+            mat-raised-button color="primary"
+            [mat-dialog-close]="true"
+            tabindex="-1"
+            *ngIf="data.editMode === 'edit'"
+            [disabled]="f.invalid || data.printer.supplies[data.printer.supplies.length-1].name === '' || data.printer.supplies[data.printer.supplies.length-1].quantity === null">
+        Save
+    </button>
+    <button
+            mat-raised-button
+            color="primary"
+            [mat-dialog-close]="true"
+            tabindex="-1"
+            *ngIf="data.editMode === 'add'"
+            [disabled]="f.invalid || data.printer.supplies[data.printer.supplies.length-1].name === '' || data.printer.supplies[data.printer.supplies.length-1].quantity === null">
+        Add
+    </button>
+    <button mat-raised-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>
+
